@@ -6,8 +6,11 @@ import org.slf4j.LoggerFactory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.springframework.beans.factory.annotation.Autowired;
 import webui.tests.components.abstracts.AbstractComponent;
+import webui.tests.components.conditions.SizeCondition;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class BlueprintsPage extends AbstractComponent<BlueprintsPage> {
@@ -36,7 +39,10 @@ public class BlueprintsPage extends AbstractComponent<BlueprintsPage> {
     WebElement topologyTab;
 
     @FindBy(css="div.buttons-group>button[value='network']")
-    WebElement networkTab;
+    WebElement networkTabButton;
+
+    @Autowired
+    NetworksTab networksTab;
 
     @FindBy(css="div.buttons-group>button[value='nodes']")
     WebElement nodesTab;
@@ -214,12 +220,38 @@ public class BlueprintsPage extends AbstractComponent<BlueprintsPage> {
         }
     }
 
+    public List<BlueprintNetwork> getNetworks(){
+
+        waitFor.size(networksList, SizeCondition.gt(0));
+
+        List<BlueprintNetwork> networks = new LinkedList<BlueprintNetwork>();
+
+        for (WebElement element : networksList) {
+            BlueprintNetwork network = new BlueprintNetwork();
+            network.init(element);
+            networks.add(network);
+        }
+
+        return networks;
+
+    }
+
+    public int getSubnetsCount(){
+        List<BlueprintNetwork> networks = getNetworks();
+        int i = 0;
+
+        for (BlueprintNetwork network : networks) {
+            i += network.subnets.size();
+        }
+
+        return i;
+    }
+
     public void checkNetwork(int[] checkingData) {
         try {
-            if(networkTab.isDisplayed()) {
-                networkTab.click();
+            if(networkTabButton.isDisplayed()) {
+                networkTabButton.click();
                 logger.info("Checking for network...");
-                // TODO: Check if network works
                 int timeoutSec = 30;
                 int numOfLoops = 0;
                 logger.info("Waiting for any drawing of networks for {} seconds...", timeoutSec);
@@ -432,4 +464,10 @@ public class BlueprintsPage extends AbstractComponent<BlueprintsPage> {
         }
     }
 
+    public NetworksTab switchToNetworks() {
+        waitFor.elements(networkTabButton);
+        networkTabButton.click();
+        networksTab.load();
+        return networksTab;
+    }
 }

@@ -13,9 +13,9 @@
             <version>1.7.0-SNAPSHOT</version>
         </dependency>
         <dependency>
-                <groupId>ch.qos.logback</groupId>
-                <artifactId>logback-classic</artifactId>
-                <version>1.1.1</version>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.1.1</version>
 
         </dependency>
         <dependency>
@@ -32,4 +32,38 @@
             <url>http://maven-repository.openspaces.org</url>
         </repository>
     </repositories>
+
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.12</version>
+                <configuration>
+                    <systemPropertyVariables>
+                        <environment>${spring.profile}</environment>
+                    </systemPropertyVariables>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>helloworld</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <spring.profile>helloWorldBlueprint</spring.profile>
+            </properties>
+        </profile>
+        <profile>
+            <id>neutron</id>
+            <properties>
+                <spring.profile>neutronBlueprint</spring.profile>
+            </properties>
+        </profile>
+    </profiles>
 </project>
