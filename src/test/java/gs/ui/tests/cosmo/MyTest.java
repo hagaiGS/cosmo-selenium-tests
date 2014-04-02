@@ -68,7 +68,7 @@ public class MyTest extends AbstractTestNGSpringContextTests {
     public static class Configuration {
 
         String url = "http://localhost:9000/#/blueprints";
-        String blueprintFile = "C:\\Users\\itsik\\MyProjects\\BlueprintPKG\\neutronBlueprint.tar.gz";
+        String blueprintFile = Configuration.class.getClassLoader().getResource("neutronBlueprint.tar.gz").getPath();
         String blueprintName = "Neutron_Blueprint_Test_7";
         String getBlueprintById = "Neutron_Blueprint_Test";
         String deploymeanName = "Neutron_Blueprint_Test_Deploy";
