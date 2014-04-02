@@ -67,7 +67,7 @@ public class MyTest extends AbstractTestNGSpringContextTests {
 
     public static class Configuration {
 
-        String url = "http://localhost:9000/#/blueprints";
+        String url = "http://cosmo.gsdev.info";
         String blueprintFile = Configuration.class.getClassLoader().getResource("neutronBlueprint.tar.gz").getPath();
         String blueprintName = "Neutron_Blueprint_Test_7";
         String getBlueprintById = "Neutron_Blueprint_Test";
