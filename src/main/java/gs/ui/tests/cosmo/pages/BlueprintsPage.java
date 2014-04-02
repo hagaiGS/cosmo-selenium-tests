@@ -41,8 +41,6 @@ public class BlueprintsPage extends AbstractComponent<BlueprintsPage> {
     @FindBy(css="div.buttons-group>button[value='network']")
     WebElement networkTabButton;
 
-    @Autowired
-    NetworksTab networksTab;
 
     @FindBy(css="div.buttons-group>button[value='nodes']")
     WebElement nodesTab;
@@ -220,32 +218,7 @@ public class BlueprintsPage extends AbstractComponent<BlueprintsPage> {
         }
     }
 
-    public List<BlueprintNetwork> getNetworks(){
 
-        waitFor.size(networksList, SizeCondition.gt(0));
-
-        List<BlueprintNetwork> networks = new LinkedList<BlueprintNetwork>();
-
-        for (WebElement element : networksList) {
-            BlueprintNetwork network = new BlueprintNetwork();
-            network.init(element);
-            networks.add(network);
-        }
-
-        return networks;
-
-    }
-
-    public int getSubnetsCount(){
-        List<BlueprintNetwork> networks = getNetworks();
-        int i = 0;
-
-        for (BlueprintNetwork network : networks) {
-            i += network.subnets.size();
-        }
-
-        return i;
-    }
 
     public void checkNetwork(int[] checkingData) {
         try {
@@ -464,10 +437,4 @@ public class BlueprintsPage extends AbstractComponent<BlueprintsPage> {
         }
     }
 
-    public NetworksTab switchToNetworks() {
-        waitFor.elements(networkTabButton);
-        networkTabButton.click();
-        networksTab.load();
-        return networksTab;
-    }
 }
