@@ -23,14 +23,14 @@ public class MyTest extends AbstractTestNGSpringContextTests {
     public Configuration config = new Configuration();
 
     @Test
-    public void initTestOfBlueprint() {
-        logger.info("Start Blueprint Test");
+    public void initTestOfBlueprintUpload() {
+        logger.info("Start Blueprint Upload Test");
 
         cosmoApp.goTo(config.url);
 
         Blueprints blueprints = cosmoApp.getBlueprints();
 
-        logger.info("Number of blueprints [{}], dom size: [{}]", blueprints.numOfBlueprints());
+        logger.info("Number of blueprints [{}]", blueprints.numOfBlueprints());
         config.setNumOfBlueprints(blueprints.numOfBlueprints());
         Assert.assertEquals(blueprints.numOfBlueprints(), config.numOfBlueprints, "Wrong number of blueprints");
 
@@ -53,14 +53,42 @@ public class MyTest extends AbstractTestNGSpringContextTests {
 
     }
 
+//    public void initTestOfBlueprintDetails() {
+//        logger.info("Start Blueprint Details Test");
+//
+//        cosmoApp.navigateTo(config.url);
+//
+//        Blueprints blueprints = cosmoApp.getBlueprints();
+//
+//        logger.info("Number of blueprints [{}]", blueprints.numOfBlueprints());
+//        config.setNumOfBlueprints(blueprints.numOfBlueprints());
+//        config.setBlueprintName(config.getBlueprintName()+(blueprints.numOfBlueprints()));
+//
+//        Blueprints.Blueprint NewBlueprint = blueprints.getBlueprintById(config.blueprintName);
+//        Assert.assertNotEquals(NewBlueprint, null, "Unable to find blueprint by ID: "+config.blueprintName);
+//
+//        logger.info("Name of blueprint: [{}]", NewBlueprint.getName());
+//        logger.info("Number of deployment: [{}]", NewBlueprint.numOfDeployments());
+//        config.setNumOfDeployments(NewBlueprint.numOfDeployments());
+//        Assert.assertEquals(NewBlueprint.numOfDeployments(), config.numOfDeployments, "Wrong number of deployments");
+//
+//        Blueprints.Blueprint.CreateDeployment NewBlueprintDeploy = NewBlueprint.createDeployment();
+//
+//        logger.info("NewBlueprintDeploy [{}]", NewBlueprintDeploy);
+//
+//        NewBlueprintDeploy
+//                .enterName(NewBlueprint.getName()+"_Deploy")
+//                .deploy();
+//
+//        logger.info("Blueprint successfully deployed!");
+//    }
+
 
     public static class Configuration {
 
         String url = "http://localhost:9000/";
         String blueprintFile = Configuration.class.getClassLoader().getResource("neutronBlueprint.tar.gz").getPath().substring(1);
         String blueprintName = "Neutron_Blueprint_Test_";
-        String getBlueprintById = "Neutron_Blueprint_Test";
-        String deploymeanName = "Neutron_Blueprint_Test_Deploy";
 
         int numOfBlueprints = 1;
         int numOfDeployments = 0;
@@ -88,22 +116,6 @@ public class MyTest extends AbstractTestNGSpringContextTests {
 
         public void setBlueprintName(String blueprintName) {
             this.blueprintName = blueprintName;
-        }
-
-        public String getGetBlueprintById() {
-            return getBlueprintById;
-        }
-
-        public void setGetBlueprintById(String getBlueprintById) {
-            this.getBlueprintById = getBlueprintById;
-        }
-
-        public String getDeploymeanName() {
-            return deploymeanName;
-        }
-
-        public void setDeploymeanName(String deploymeanName) {
-            this.deploymeanName = deploymeanName;
         }
 
         public int getNumOfBlueprints() {

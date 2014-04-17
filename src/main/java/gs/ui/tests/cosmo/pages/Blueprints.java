@@ -25,7 +25,7 @@ public class Blueprints extends AbstractComponent<Blueprints> {
     @FindBy(css="table.table>tbody")
     List<WebElement> blueprintsDomList = null;
 
-    @FindBy(css="div#confirmationDialogContainer")
+    @FindBy(css="div#deployDialogContainer")
     WebElement deployConfirmBox = null;
 
     @FindBy(css="button[ng-click='toggleAddDialog()']")
@@ -189,6 +189,7 @@ public class Blueprints extends AbstractComponent<Blueprints> {
 
         public class CreateDeployment {
             protected CreateDeployment openDialogBox(WebElement blueprint) {
+                logger.info("Open Deploy Dialog");
                 WebElement deployButton = blueprint.findElement(By.cssSelector("button.deploy-button"));
                 deployButton.click();
                 waitFor.elements(deployConfirmBox);
@@ -196,16 +197,18 @@ public class Blueprints extends AbstractComponent<Blueprints> {
             }
 
             public CreateDeployment enterName(String deploymentName) {
+                logger.info("CreateDeployment enterName: [{}]", deploymentName);
                 deployConfirmBox.findElement(By.cssSelector("input[ng-model='deploymentId']")).sendKeys(deploymentName);
                 return this;
             }
 
             public void deploy() {
+                logger.info("Deploy!");
                 deployConfirmBox.findElement(By.cssSelector("button#deployBtn")).click();
             }
 
             public void cancel() {
-                deployConfirmBox.findElement(By.cssSelector("button#cancelBtn")).click();
+                deployConfirmBox.findElement(By.cssSelector("div.dialogClose")).click();
             }
         }
     }
