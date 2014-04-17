@@ -30,12 +30,13 @@ public class MyTest extends AbstractTestNGSpringContextTests {
 
         Blueprints blueprints = cosmoApp.getBlueprints();
 
-        logger.info("Number of blueprints [{}]", blueprints.numOfBlueprints());
-        Assert.assertEquals(config.numOfBlueprints, blueprints.numOfBlueprints(), "Wrong number of blueprints");
+        logger.info("Number of blueprints [{}], dom size: [{}]", blueprints.numOfBlueprints());
+        config.setNumOfBlueprints(blueprints.numOfBlueprints());
+        Assert.assertEquals(blueprints.numOfBlueprints(), config.numOfBlueprints, "Wrong number of blueprints");
 
 
         Blueprints.UploadBlueprint upload = blueprints.uploadBlueprint();
-
+        config.setBlueprintName(config.getBlueprintName()+(blueprints.numOfBlueprints()+1));
         upload.browse(config.blueprintFile)
                 .enterName(config.blueprintName)
                 .upload();
@@ -43,33 +44,21 @@ public class MyTest extends AbstractTestNGSpringContextTests {
         logger.info("is upload succeeded? [{}]", upload.isUploadSucceeded());
         logger.info("Error Message [{}]", upload.error());
 
-        Assert.assertEquals(true, upload.isUploadSucceeded(), upload.error());
+        Assert.assertEquals(upload.isUploadSucceeded(), true, upload.error());
 
         if(upload.isUploadSucceeded()) {
             upload.close();
             logger.info("Blueprint successfully uploaded and the list of blueprints was updated!");
         }
 
-
-        Blueprints.Blueprint HelloWorld1 = blueprints.getBlueprintById(config.getBlueprintById);
-        logger.info("Name of blueprint: [{}]", HelloWorld1.getName());
-        logger.info("Number of deployment: [{}]", HelloWorld1.numOfDeployments());
-        Assert.assertEquals(config.numOfDeployments, HelloWorld1.numOfDeployments(), "Wrong number of deployments");
-
-        Blueprints.Blueprint.CreateDeployment HelloWorld1Deploy = HelloWorld1.createDeployment();
-
-        HelloWorld1Deploy
-                .enterName(config.deploymeanName)
-                .deploy();
-
     }
 
 
     public static class Configuration {
 
-        String url = "http://cosmo.gsdev.info";
-        String blueprintFile = Configuration.class.getClassLoader().getResource("neutronBlueprint.tar.gz").getPath();
-        String blueprintName = "Neutron_Blueprint_Test_7";
+        String url = "http://localhost:9000/";
+        String blueprintFile = Configuration.class.getClassLoader().getResource("neutronBlueprint.tar.gz").getPath().substring(1);
+        String blueprintName = "Neutron_Blueprint_Test_";
         String getBlueprintById = "Neutron_Blueprint_Test";
         String deploymeanName = "Neutron_Blueprint_Test_Deploy";
 

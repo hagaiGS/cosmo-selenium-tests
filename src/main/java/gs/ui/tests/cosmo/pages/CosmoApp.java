@@ -34,6 +34,10 @@ public class CosmoApp extends AbstractComponent<CosmoApp>{
         webDriver.navigate().to(url);
     }
 
+    public void refreshPage() {
+        webDriver.navigate().refresh();
+    }
+
     public Blueprints getBlueprints() {
         blueprints.load();
         return blueprints;
