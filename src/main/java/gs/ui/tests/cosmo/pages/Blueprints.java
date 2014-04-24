@@ -1,13 +1,19 @@
 package gs.ui.tests.cosmo.pages;
 
+import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import webui.tests.annotations.Absolute;
+import webui.tests.annotations.LazyLoad;
+import webui.tests.annotations.NoEnhancement;
 import webui.tests.components.abstracts.AbstractComponent;
+import webui.tests.selenium.GsFieldDecorator;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -25,8 +31,9 @@ public class Blueprints extends AbstractComponent<Blueprints> {
     @FindBy(css="table.table>tbody")
     List<WebElement> blueprintsDomList = null;
 
+    @LazyLoad
     @FindBy(css="div#deployDialogContainer")
-    WebElement deployConfirmBox = null;
+    DeployConfirmBox deployConfirmBox = null;
 
     @FindBy(css="button[ng-click='toggleAddDialog()']")
     WebElement uploadBlueprintBtn = null;
@@ -34,42 +41,56 @@ public class Blueprints extends AbstractComponent<Blueprints> {
     @FindBy(css="div#uploadDialogContainer")
     WebElement uploadDialogContainer = null;
 
+    @Absolute
+    @FindBy(css="body")
+    BlueprintPage blueprintPage = null;
+
+    // GUY _ this is a hack until we get this into the test beans framework
+    @NoEnhancement
+    public <T > T load( T component, SearchContext searchContext) {
+        PageFactory.initElements(new GsFieldDecorator(searchContext, webDriver).setSwitchManager(switchManager).setWaitFor(waitFor), component);
+        return (T) this;
+    }
+
+    public Blueprints init() {
+        load();
+        waitForBlueprintsLoaded();
+        load();
+        grabBlueprints();
+        return this;
+    }
 
     private void waitForBlueprintsLoaded(){
         logger.info("will wait for loading hidden");
         waitFor.predicate( new ExpectedCondition<Boolean>() {
             @Override
             public Boolean apply(WebDriver webDriver) {
-                try{
+                try {
                     logger.debug("checking if loading is hidden");
                     WebElement element = getRootElement().findElement(By.cssSelector(".loading"));
                     logger.debug("loading is still visible :: " + element.isDisplayed());
-                    return element.isDisplayed() ? null : true;
+                    if (element.isDisplayed() == false) {
+                        logger.info("loading is now hidden..");
+                        return true;
+                    }
+                    return null;
 
-                }catch( NoSuchElementException e){
+                } catch (NoSuchElementException e) {
                     logger.info("loading is finally hidden!");
                     return true;
-                }catch(Exception e){
-                    logger.error("unable to determine if loading is visible or not",e);
+                } catch (Exception e) {
+                    logger.error("unable to determine if loading is visible or not", e);
                     return null;
                 }
             }
         });
     }
 
-    @Override
-    public Blueprints load() {
-        super.load();
-        waitForBlueprintsLoaded();
-        super.load();
-        init();
-        return this;
-    }
-
-    public void init() {
+    public void grabBlueprints() {
         try {
             for (WebElement blueprintItem : blueprintsDomList) {
                 Blueprint blueprint = new Blueprint();
+                load(blueprint, blueprintItem);
                 blueprint.init(blueprintItem);
                 blueprints.add(blueprint);
             }
@@ -95,7 +116,6 @@ public class Blueprints extends AbstractComponent<Blueprints> {
     public UploadBlueprint uploadBlueprint() {
         return uploadBlueprint.openDialogBox();
     }
-
 
     public class UploadBlueprint {
         protected UploadBlueprint openDialogBox() {
@@ -159,32 +179,71 @@ public class Blueprints extends AbstractComponent<Blueprints> {
         }
     }
 
-    public class Blueprint {
-        private WebElement blueprintElement;
+    public static class DeployConfirmBox extends AbstractComponent<DeployConfirmBox>{
+
+        @FindBy(css = "input[ng-model='deploymentId']")
+        WebElement deploymentId;
+
+        @FindBy(css = "button#deployBtn" )
+        WebElement submitButton;
+
+        @FindBy(css = "div.dialogClose")
+        WebElement cancelButton;
+
+        public DeployConfirmBox() {
+        }
+
+        public void setDeploymentId(String deploymentName) {
+            deploymentId.sendKeys(deploymentName);
+        }
+
+        public void submit() {
+            submitButton.click();
+        }
+
+        public void cancel() {
+            cancelButton.click();
+        }
+    }
+
+    public class Blueprint extends AbstractComponent<Blueprint>  {
         private CreateDeployment createDeployment = new CreateDeployment();
 
+        @FindBy(css = "td.name")
+        WebElement name;
+
+        @FindBy(css = "div.deployments-number")
+        WebElement deploymentsNumber;
+
         public void init(WebElement webElement) {
-            blueprintElement = webElement;
+            this.webElement = webElement;
+            load();
         }
 
         public boolean equalTo(String id) {
-            return blueprintElement.findElement(By.cssSelector("td.name")).getText().equals(id);
+            return getId().equals(id);
         }
 
         public String getId() {
-            return blueprintElement.findElement(By.cssSelector("td.name")).getText();
+            return getName(); //the name is the id
         }
 
         public String getName() {
-            return blueprintElement.findElement(By.cssSelector("td.name")).getText();
+            return name.getText();
         }
 
         public int numOfDeployments() {
-            return Integer.parseInt(blueprintElement.findElement(By.cssSelector("div.deployments-number")).getText());
+            return Integer.parseInt(deploymentsNumber.getText());
+        }
+
+        public BlueprintPage open() {
+            logger.info("Open Blueprint");
+            name.click();
+            return blueprintPage.load();
         }
 
         public CreateDeployment createDeployment() {
-            return createDeployment.openDialogBox(blueprintElement);
+            return createDeployment.openDialogBox(webElement);
         }
 
         public class CreateDeployment {
@@ -192,23 +251,26 @@ public class Blueprints extends AbstractComponent<Blueprints> {
                 logger.info("Open Deploy Dialog");
                 WebElement deployButton = blueprint.findElement(By.cssSelector("button.deploy-button"));
                 deployButton.click();
-                waitFor.elements(deployConfirmBox);
+                deployConfirmBox.load();
+
                 return this;
             }
 
             public CreateDeployment enterName(String deploymentName) {
                 logger.info("CreateDeployment enterName: [{}]", deploymentName);
-                deployConfirmBox.findElement(By.cssSelector("input[ng-model='deploymentId']")).sendKeys(deploymentName);
+                deployConfirmBox.setDeploymentId(deploymentName);
                 return this;
             }
 
             public void deploy() {
                 logger.info("Deploy!");
-                deployConfirmBox.findElement(By.cssSelector("button#deployBtn")).click();
+                deployConfirmBox.submit();
+
             }
 
             public void cancel() {
-                deployConfirmBox.findElement(By.cssSelector("div.dialogClose")).click();
+                deployConfirmBox.cancel();
+
             }
         }
     }

@@ -1,14 +1,9 @@
 package gs.ui.tests.cosmo.pages;
 
-import ch.qos.logback.core.Context;
-import ch.qos.logback.core.spi.ContextAware;
 import org.openqa.selenium.support.FindBy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import webui.tests.annotations.LazyLoad;
 import webui.tests.components.abstracts.AbstractComponent;
 
@@ -21,13 +16,23 @@ public class CosmoApp extends AbstractComponent<CosmoApp>{
     @Autowired
     @LazyLoad
     @FindBy(css = "#main-content")
-    public Blueprints blueprints = new Blueprints();
+    public Deployments deployments;
+
+    @Autowired
+    @LazyLoad
+    @FindBy(css = "#main-content")
+    public Blueprints blueprints;
 
     private static Logger logger = LoggerFactory.getLogger(CosmoApp.class);
 
     public CosmoApp goTo(String url) {
-        webDriver.get(url);
-        return load();
+        try {
+            webDriver.get(url);
+            return load();
+        } catch (Exception e) {
+            logger.error("unable to load page", e);
+            return null;
+        }
     }
 
     public void navigateTo(String url) {
@@ -39,8 +44,17 @@ public class CosmoApp extends AbstractComponent<CosmoApp>{
     }
 
     public Blueprints getBlueprints() {
-        blueprints.load();
+        blueprints.init();
         return blueprints;
+    }
+
+    public Deployments getDeployments() {
+        deployments.init();
+        return deployments;
+    }
+
+    public void setDeployments(Deployments deployments) {
+        this.deployments = deployments;
     }
 
     public void setBlueprints(Blueprints blueprints) {

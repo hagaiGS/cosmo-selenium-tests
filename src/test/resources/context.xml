@@ -9,13 +9,14 @@
     <import resource="classpath:webui-test-beans-context.xml"/>
     <context:annotation-config/>
 
-    <bean id="blueprintPage" class="gs.ui.tests.cosmo.pages.CosmoApp">
+    <bean id="testBeansContext" class="gs.ui.tests.cosmo.pages.TestBeansContext"/>
+    <bean id="cosmoApp" class="gs.ui.tests.cosmo.pages.CosmoApp"/>
+    <bean id="blueprintPage" class="gs.ui.tests.cosmo.pages.BlueprintPage" />
+    <bean id="blueprints" class="gs.ui.tests.cosmo.pages.Blueprints" />
+    <bean id="deployments" class="gs.ui.tests.cosmo.pages.Deployments" />
 
-    </bean>
 
-    <bean id="blueprints" class="gs.ui.tests.cosmo.pages.Blueprints">
 
-    </bean>
 
 
     <beans profile="helloWorldBlueprint">
