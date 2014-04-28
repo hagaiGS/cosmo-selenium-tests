@@ -9,27 +9,18 @@
     <import resource="classpath:webui-test-beans-context.xml"/>
     <context:annotation-config/>
 
-    <bean id="testBeansContext" class="gs.ui.tests.cosmo.pages.TestBeansContext"/>
-    <bean id="cosmoApp" class="gs.ui.tests.cosmo.pages.CosmoApp"/>
+    <bean id="testBeansContext" class="gs.ui.tests.cosmo.pages.TestBeansContext" />
+    <bean id="cosmoApp" class="gs.ui.tests.cosmo.pages.CosmoApp" />
     <bean id="blueprintPage" class="gs.ui.tests.cosmo.pages.BlueprintPage" />
+    <bean id="deploymentPage" class="gs.ui.tests.cosmo.pages.DeploymentPage" />
     <bean id="blueprints" class="gs.ui.tests.cosmo.pages.Blueprints" />
     <bean id="deployments" class="gs.ui.tests.cosmo.pages.Deployments" />
-
-
-
-
+    <bean id="confirm" class="gs.ui.tests.cosmo.pages.Confirm" />
 
     <beans profile="helloWorldBlueprint">
         <bean id="helloWorldBlueprint" class="gs.ui.tests.cosmo.MyTest$Configuration">
             <property name="url" value="http://localhost:9000/#/blueprint"/>
         </bean>
     </beans>
-
-    <!--<beans profile="neutronBlueprint">-->
-        <!--<bean id="neutronBlueprint" class="gs.ui.tests.cosmo.MyTest$Configuration">-->
-            <!--<property name="url" value="http://localhost:9000/#/blueprint?id=hello_neutron&name=hello_neutron"/>-->
-        <!--</bean>-->
-    <!--</beans>-->
-
 
 </beans>

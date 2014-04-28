@@ -9,7 +9,9 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import webui.tests.annotations.Absolute;
+import webui.tests.annotations.LazyLoad;
 import webui.tests.annotations.NoEnhancement;
 import webui.tests.components.abstracts.AbstractComponent;
 import webui.tests.selenium.GsFieldDecorator;
@@ -31,7 +33,11 @@ public class Deployments extends AbstractComponent<Deployments> {
 
     @Absolute
     @FindBy(css="body")
-    BlueprintPage blueprintPage = null;
+    DeploymentPage deploymentPage = null;
+
+    @Absolute
+    @FindBy(css="body")
+    Confirm confirm = null;
 
     // GUY _ this is a hack until we get this into the test beans framework
     @NoEnhancement
@@ -101,6 +107,18 @@ public class Deployments extends AbstractComponent<Deployments> {
         @FindBy(css = "td.id")
         WebElement name;
 
+        @FindBy(css = "div.multiSelectMenu")
+        WebElement workflowSelect;
+
+        @FindBy(css = "div.multiSelectMenu ul > li")
+        List<WebElement> workflowSelectList;
+
+        @FindBy(css = "i.deployment-play")
+        WebElement deployPlay;
+
+        @FindBy(css = "i.deployment-pause")
+        WebElement deployPause;
+
         public void init(WebElement webElement) {
             this.webElement = webElement;
             load();
@@ -118,11 +136,27 @@ public class Deployments extends AbstractComponent<Deployments> {
             return name.getText();
         }
 
-        public BlueprintPage open() {
+        public void setWorkflow(String workflow) {
+            workflowSelect.click();
+            for(WebElement option : workflowSelectList) {
+                if(option.getText().equals(workflow)){
+                    logger.info("Set workflow to: [{}]", workflow);
+                    option.click();
+                }
+            }
+        }
+
+        public Confirm deployPlay() {
+            deployPlay.click();
+            return confirm;
+        }
+
+        public DeploymentPage open() {
             logger.info("Open Deployment");
             name.click();
-            return blueprintPage.load();
+            return deploymentPage.load();
         }
 
     }
+
 }

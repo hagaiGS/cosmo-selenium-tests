@@ -1,9 +1,6 @@
 package gs.ui.tests.cosmo;
 
-import gs.ui.tests.cosmo.pages.BlueprintPage;
-import gs.ui.tests.cosmo.pages.Blueprints;
-import gs.ui.tests.cosmo.pages.CosmoApp;
-import gs.ui.tests.cosmo.pages.Deployments;
+import gs.ui.tests.cosmo.pages.*;
 import org.junit.After;
 import org.junit.Before;
 import org.slf4j.Logger;
@@ -123,12 +120,20 @@ public class MyTest extends AbstractTestNGSpringContextTests {
 
         logger.info("Start testing of deployment: [{}]", deployment.getName());
 
-        BlueprintPage blueprintPage = deployment.open();
+        deployment.setWorkflow("install");
+        deployment.deployPlay().cancel();
 
-        Assert.assertEquals(blueprintPage.numOfTopologyNodes(), 2, "Wrong number of topology nodes");
-        Assert.assertEquals(blueprintPage.numOfNetworks(), 2, "Wrong number of networks");
-        Assert.assertEquals(blueprintPage.numOfSubnets(), 1, "Wrong number of subnets");
-        Assert.assertEquals(blueprintPage.numOfDevices(), 0, "Wrong number of devices");
+        DeploymentPage deploymentPage = deployment.open();
+
+        deploymentPage.openTopology();
+        deploymentPage.setWorkflow("install");
+        deploymentPage.deployPlay();
+        deploymentPage.deployPlay().cancel();
+
+        Assert.assertEquals(deploymentPage.numOfTopologyNodes(), 2, "Wrong number of topology nodes");
+        Assert.assertEquals(deploymentPage.numOfNetworks(), 2, "Wrong number of networks");
+        Assert.assertEquals(deploymentPage.numOfSubnets(), 1, "Wrong number of subnets");
+        Assert.assertEquals(deploymentPage.numOfDevices(), 0, "Wrong number of devices");
     }
 
 
