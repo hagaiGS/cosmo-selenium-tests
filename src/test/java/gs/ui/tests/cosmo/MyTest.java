@@ -146,18 +146,24 @@ public class MyTest extends AbstractTestNGSpringContextTests {
 //
 //    }
 
-    @Test
-    public void initTestOfLogs() {
-        logger.info("Start Logs Test");
-        cosmoApp.goTo(config.logsUrl);
-        logs = cosmoApp.getLogs();
-
-        if(logs.isLogsEmpty()) {
-            logs.waitForLogs();
-            logger.info("Number Of Logs: [{}]", logs.numOfLogs());
-        }
-
-    }
+//    @Test
+//    public void initTestOfLogs() {
+//        logger.info("Start Logs Test");
+//        cosmoApp.goTo(config.logsUrl);
+//        logs = cosmoApp.getLogs();
+//
+//        logs.filterBlueprints("guy11");
+//        logs.filterDeployments("dep111");
+//        logs.filterExecutions("install (2014-04-10 00:39:03)");
+//        logs.filterTimeframe("5 Days");
+//        logs.show();
+//
+//        if(logs.isLogsEmpty()) {
+//            logs.waitForLogs();
+//            logger.info("Number Of Logs: [{}]", logs.numOfLogs());
+//        }
+//
+//    }
 
 
     public static class Configuration {
