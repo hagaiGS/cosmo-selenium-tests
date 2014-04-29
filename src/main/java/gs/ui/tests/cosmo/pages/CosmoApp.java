@@ -1,15 +1,19 @@
 package gs.ui.tests.cosmo.pages;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import webui.tests.annotations.LazyLoad;
+import webui.tests.annotations.NoEnhancement;
 import webui.tests.components.abstracts.AbstractComponent;
+import webui.tests.selenium.GsFieldDecorator;
 
 import java.util.NoSuchElementException;
 
@@ -29,12 +33,17 @@ public class CosmoApp extends AbstractComponent<CosmoApp> {
     @FindBy(css = "#main-content")
     public Blueprints blueprints;
 
+    @Autowired
+    @LazyLoad
+    @FindBy(css = "#main-content")
+    public Logs logs;
+
     private static Logger logger = LoggerFactory.getLogger(CosmoApp.class);
 
     public CosmoApp goTo(String url) {
         try {
             webDriver.get(url);
-            return load();
+            return load(webDriver);
         } catch (Exception e) {
             logger.error("unable to load page", e);
             return null;
@@ -57,6 +66,11 @@ public class CosmoApp extends AbstractComponent<CosmoApp> {
     public Deployments getDeployments() {
         deployments.init();
         return deployments;
+    }
+
+    public Logs getLogs() {
+        logs.init();
+        return logs;
     }
 
     public void setDeployments(Deployments deployments) {

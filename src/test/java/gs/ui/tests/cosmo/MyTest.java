@@ -25,12 +25,12 @@ public class MyTest extends AbstractTestNGSpringContextTests {
 
     private Blueprints blueprints;
     private Deployments deployments;
+    private Logs logs;
 
 //    @Test
 //    public void initTestOfBlueprintPage() {
 //        logger.info("Start Blueprint Page Test");
 //        cosmoApp.goTo(config.url);
-//
 //        blueprints = cosmoApp.getBlueprints();
 //
 //        config.setBlueprintName(config.getBlueprintName()+(12));
@@ -50,6 +50,9 @@ public class MyTest extends AbstractTestNGSpringContextTests {
 //        Assert.assertEquals(blueprintPage.isSourceExist(), true, "Source code are empty");
 //
 //    }
+
+
+
 
 //    @Test
 //    public void initTestOfBlueprintUpload() {
@@ -79,7 +82,9 @@ public class MyTest extends AbstractTestNGSpringContextTests {
 //        }
 //
 //    }
-//
+
+
+
 //    @Test
 //    public void initTestOfBlueprintDetails() {
 //        logger.info("Start Blueprint Details Test");
@@ -110,30 +115,48 @@ public class MyTest extends AbstractTestNGSpringContextTests {
 //
 //    }
 
+//    @Test
+//    public void initTestOfDeployment() {
+//        logger.info("Start Deployments Test");
+//        cosmoApp.goTo(config.deploymentUrl);
+//        deployments = cosmoApp.getDeployments();
+//
+//        Deployments.Deployment deployment = deployments.getDeploymentById("Neutron_Blueprint_Test_43_Deploy");
+//
+//        logger.info("Start testing of deployment: [{}]", deployment.getName());
+//
+//        deployment.setWorkflow("install");
+//        deployment.deployPlay().cancel();
+//
+//        DeploymentPage deploymentPage = deployment.open();
+//
+//        if(deploymentPage.isEventsWidgetOpen()) {
+//            deploymentPage.closeEventsWidget();
+//        }
+//
+//        deploymentPage.openTopology();
+//        deploymentPage.setWorkflow("install");
+//        deploymentPage.deployPlay();
+//        deploymentPage.deployPlay().cancel();
+//
+//        Assert.assertEquals(deploymentPage.numOfTopologyNodes(), 2, "Wrong number of topology nodes");
+//        Assert.assertEquals(deploymentPage.numOfNetworks(), 2, "Wrong number of networks");
+//        Assert.assertEquals(deploymentPage.numOfSubnets(), 1, "Wrong number of subnets");
+//        Assert.assertEquals(deploymentPage.numOfDevices(), 0, "Wrong number of devices");
+//
+//    }
+
     @Test
-    public void initTestOfDeployment() {
-        logger.info("Start Deployments Test");
-        cosmoApp.goTo(config.deploymentUrl);
-        deployments = cosmoApp.getDeployments();
+    public void initTestOfLogs() {
+        logger.info("Start Logs Test");
+        cosmoApp.goTo(config.logsUrl);
+        logs = cosmoApp.getLogs();
 
-        Deployments.Deployment deployment = deployments.getDeploymentById("Neutron_Blueprint_Test_43_Deploy");
+        if(logs.isLogsEmpty()) {
+            logs.waitForLogs();
+            logger.info("Number Of Logs: [{}]", logs.numOfLogs());
+        }
 
-        logger.info("Start testing of deployment: [{}]", deployment.getName());
-
-        deployment.setWorkflow("install");
-        deployment.deployPlay().cancel();
-
-        DeploymentPage deploymentPage = deployment.open();
-
-        deploymentPage.openTopology();
-        deploymentPage.setWorkflow("install");
-        deploymentPage.deployPlay();
-        deploymentPage.deployPlay().cancel();
-
-        Assert.assertEquals(deploymentPage.numOfTopologyNodes(), 2, "Wrong number of topology nodes");
-        Assert.assertEquals(deploymentPage.numOfNetworks(), 2, "Wrong number of networks");
-        Assert.assertEquals(deploymentPage.numOfSubnets(), 1, "Wrong number of subnets");
-        Assert.assertEquals(deploymentPage.numOfDevices(), 0, "Wrong number of devices");
     }
 
 
@@ -141,6 +164,7 @@ public class MyTest extends AbstractTestNGSpringContextTests {
 
         String url = "http://localhost:9000/";
         String deploymentUrl = "http://localhost:9000/#/deployments";
+        String logsUrl = "http://localhost:9000/#/logs";
         String blueprintFile = Configuration.class.getClassLoader().getResource("neutronBlueprint.tar.gz").getPath().substring(1);
         String blueprintName = "Neutron_Blueprint_Test_";
 

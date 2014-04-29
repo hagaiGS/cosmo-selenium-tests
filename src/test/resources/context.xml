@@ -15,6 +15,7 @@
     <bean id="deploymentPage" class="gs.ui.tests.cosmo.pages.DeploymentPage" />
     <bean id="blueprints" class="gs.ui.tests.cosmo.pages.Blueprints" />
     <bean id="deployments" class="gs.ui.tests.cosmo.pages.Deployments" />
+    <bean id="logs" class="gs.ui.tests.cosmo.pages.Logs" />
     <bean id="confirm" class="gs.ui.tests.cosmo.pages.Confirm" />
 
     <beans profile="helloWorldBlueprint">
