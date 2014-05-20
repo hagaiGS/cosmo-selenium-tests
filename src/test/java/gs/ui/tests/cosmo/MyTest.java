@@ -1,9 +1,6 @@
 package gs.ui.tests.cosmo;
 
 import gs.ui.tests.cosmo.pages.*;
-import org.apache.commons.lang3.SystemUtils;
-import org.junit.After;
-import org.junit.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,10 +26,11 @@ public class MyTest extends AbstractTestNGSpringContextTests {
     private Logs logs;
 
     @Test(groups = "uploadBlueprint")
-
     public void testBlueprintUpload() {
         logger.info("Start Blueprint Upload Test");
+
         cosmoApp.goTo(config.url);
+        try{Thread.sleep(5000);}catch(Exception e){}
         blueprints = cosmoApp.getBlueprints();
         String filePathFirstChar = "";
 
@@ -42,11 +40,12 @@ public class MyTest extends AbstractTestNGSpringContextTests {
 
 
         Blueprints.UploadBlueprint upload = blueprints.uploadBlueprint();
-        config.setBlueprintName(config.getBlueprintName() + (blueprints.numOfBlueprints() + 1));
-        if (SystemUtils.IS_OS_MAC || SystemUtils.IS_OS_MAC_OSX) {
-            filePathFirstChar = "/";
-        }
-        upload.browse(filePathFirstChar + config.blueprintFile)
+        config.setBlueprintName(config.getBlueprintName() + System.currentTimeMillis());
+//        if (SystemUtils.IS_OS_MAC || SystemUtils.IS_OS_MAC_OSX) {
+//            config.blueprintFile = "/" + config.blueprintFile;
+//        }
+        logger.info( config.blueprintFile );
+        upload.browse( config.blueprintFile)
                 .enterName(config.blueprintName)
                 .upload();
 
@@ -88,10 +87,11 @@ public class MyTest extends AbstractTestNGSpringContextTests {
         Assert.assertEquals(blueprintPage.isSourceExist(), true, "Source code are empty");
     }
 
-    @Test(dependsOnGroups = "uploadBlueprint")
+//    @Test(dependsOnGroups = "uploadBlueprint")
     public void testBlueprintDetails() {
         logger.info("Start Blueprint Details Test");
         cosmoApp.goTo(config.url);
+        try{Thread.sleep(5000);}catch(Exception e ){}
         blueprints = cosmoApp.getBlueprints();
 
         logger.info("Number of blueprints [{}]", blueprints.numOfBlueprints());
@@ -99,21 +99,29 @@ public class MyTest extends AbstractTestNGSpringContextTests {
         config.setBlueprintName(blueprints.blueprints.get(0).getName());
 //        config.setBlueprintName(config.getBlueprintName()+(blueprints.numOfBlueprints()));
 
-        Blueprints.Blueprint NewBlueprint = blueprints.getBlueprintById(config.blueprintName);
-        Assert.assertNotEquals(NewBlueprint, null, "Unable to find blueprint by ID: "+config.blueprintName);
+        Blueprints.Blueprint newBlueprint = blueprints.getBlueprintById(config.blueprintName);
+        Assert.assertNotEquals(newBlueprint, null, "Unable to find blueprint by ID: "+config.blueprintName);
 
-        logger.info("Name of blueprint: [{}]", NewBlueprint.getName());
-        logger.info("Number of deployment: [{}]", NewBlueprint.numOfDeployments());
-        config.setNumOfDeployments(NewBlueprint.numOfDeployments());
-        Assert.assertEquals(NewBlueprint.numOfDeployments(), config.numOfDeployments, "Wrong number of deployments");
+        logger.info("Name of blueprint: [{}]", newBlueprint.getName());
+        logger.info("Number of deployment: [{}]", newBlueprint.numOfDeployments());
+        config.setNumOfDeployments(newBlueprint.numOfDeployments());
+        Assert.assertEquals(newBlueprint.numOfDeployments(), config.numOfDeployments, "Wrong number of deployments");
 
-        Blueprints.Blueprint.CreateDeployment NewBlueprintDeploy = NewBlueprint.createDeployment();
+        logger.info("creating deployment");
+        Blueprints.Blueprint.CreateDeploymentDialog newBlueprintDeployment = newBlueprint.createDeployment();
+        logger.info("deployment created");
 
-        logger.info("NewBlueprintDeploy [{}]", NewBlueprintDeploy);
+        logger.info("NewBlueprintDeploy [{}]", newBlueprintDeployment);
 
-        NewBlueprintDeploy
-                .enterName(NewBlueprint.getName()+"_Deploy")
+        String deploymentName = newBlueprint.getName() + "_Deploy";
+        Deployments deployments = newBlueprintDeployment
+                .enterName(deploymentName)
                 .deploy();
+
+        Deployments.Deployment deploymentById = deployments.getDeploymentById(deploymentName);
+        DeploymentPage deploymentPage = deploymentById.open();
+        deploymentPage.setWorkflow("install").deployPlay().confirm();
+//        deploymentPage.getProgressBar().isVisible();
 
         logger.info("Blueprint successfully deployed!");
 
@@ -175,7 +183,7 @@ public class MyTest extends AbstractTestNGSpringContextTests {
         String url = "http://cosmo.gsdev.info/";
         String deploymentUrl = "http://cosmo.gsdev.info/#/deployments";
         String logsUrl = "http://cosmo.gsdev.info/#/logs";
-        String blueprintFile = Configuration.class.getClassLoader().getResource("neutronBlueprint.tar.gz").getPath().substring(1);
+        String blueprintFile = Configuration.class.getClassLoader().getResource("neutronBlueprint.tar.gz").getPath();
         String blueprintName = "Neutron_Blueprint_Test_";
 
         int numOfBlueprints = 1;

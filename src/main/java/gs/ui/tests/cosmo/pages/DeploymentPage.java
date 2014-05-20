@@ -62,7 +62,7 @@ public class DeploymentPage extends AbstructBlueprint<DeploymentPage> {
         return numOfEvents() > 0 ? false : true;
     }
 
-    public void setWorkflow(String workflow) {
+    public DeploymentPage setWorkflow(String workflow) {
         try {
             workflowSelect.click();
         } catch (Exception e) {
@@ -74,6 +74,8 @@ public class DeploymentPage extends AbstructBlueprint<DeploymentPage> {
                 option.click();
             }
         }
+
+        return this;
     }
 
     public Confirm deployPlay() {
