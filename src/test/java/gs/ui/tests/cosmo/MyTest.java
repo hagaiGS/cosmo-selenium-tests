@@ -28,8 +28,9 @@ public class MyTest extends AbstractTestNGSpringContextTests {
     private Deployments deployments;
     private Logs logs;
 
-    @Test
-    public void a_initTestOfBlueprintUpload() {
+    @Test(groups = "uploadBlueprint")
+
+    public void testBlueprintUpload() {
         logger.info("Start Blueprint Upload Test");
         cosmoApp.goTo(config.url);
         blueprints = cosmoApp.getBlueprints();
@@ -61,8 +62,9 @@ public class MyTest extends AbstractTestNGSpringContextTests {
 
     }
 
-    @Test
-    public void b_initTestOfBlueprintPage() {
+    @Test( dependsOnGroups =  "uploadBlueprint")
+
+    public void testOfBlueprintPage() {
         logger.info("Start Blueprint Page Test");
         cosmoApp.goTo(config.url);
         blueprints = cosmoApp.getBlueprints();
@@ -86,8 +88,8 @@ public class MyTest extends AbstractTestNGSpringContextTests {
         Assert.assertEquals(blueprintPage.isSourceExist(), true, "Source code are empty");
     }
 
-    @Test
-    public void c_initTestOfBlueprintDetails() {
+    @Test(dependsOnGroups = "uploadBlueprint")
+    public void testBlueprintDetails() {
         logger.info("Start Blueprint Details Test");
         cosmoApp.goTo(config.url);
         blueprints = cosmoApp.getBlueprints();
@@ -117,8 +119,8 @@ public class MyTest extends AbstractTestNGSpringContextTests {
 
     }
 
-    @Test
-    public void d_initTestOfDeployment() {
+    @Test( dependsOnGroups = "uploadBlueprint", groups = "deployment")
+    public void testDeployment() {
         logger.info("Start Deployments Test");
         cosmoApp.goTo(config.deploymentUrl);
         deployments = cosmoApp.getDeployments();
@@ -150,8 +152,8 @@ public class MyTest extends AbstractTestNGSpringContextTests {
 
     }
 
-    @Test
-    public void e_initTestOfLogs() {
+    @Test (dependsOnGroups = "deployment")
+    public void testLogs() {
         logger.info("Start Logs Test");
         cosmoApp.goTo(config.logsUrl);
         logs = cosmoApp.getLogs();
@@ -170,9 +172,9 @@ public class MyTest extends AbstractTestNGSpringContextTests {
 
     public static class Configuration {
 
-        String url = "http://localhost:9000/";
-        String deploymentUrl = "http://localhost:9000/#/deployments";
-        String logsUrl = "http://localhost:9000/#/logs";
+        String url = "http://cosmo.gsdev.info/";
+        String deploymentUrl = "http://cosmo.gsdev.info/#/deployments";
+        String logsUrl = "http://cosmo.gsdev.info/#/logs";
         String blueprintFile = Configuration.class.getClassLoader().getResource("neutronBlueprint.tar.gz").getPath().substring(1);
         String blueprintName = "Neutron_Blueprint_Test_";
 
