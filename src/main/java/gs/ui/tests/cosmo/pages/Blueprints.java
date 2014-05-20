@@ -47,9 +47,9 @@ public class Blueprints extends AbstractComponent<Blueprints> {
 
     // GUY _ this is a hack until we get this into the test beans framework
     @NoEnhancement
-    public <T > T load( T component, SearchContext searchContext) {
+    public <Y > Y load( Y component, SearchContext searchContext) {
         PageFactory.initElements(new GsFieldDecorator(searchContext, webDriver).setSwitchManager(switchManager).setWaitFor(waitFor), component);
-        return (T) this;
+        return (Y) this;
     }
 
     public Blueprints init() {
@@ -207,13 +207,20 @@ public class Blueprints extends AbstractComponent<Blueprints> {
     }
 
     public class Blueprint extends AbstractComponent<Blueprint>  {
-        private CreateDeployment createDeployment = new CreateDeployment();
+        private CreateDeploymentDialog createDeployment = new CreateDeploymentDialog();
 
         @FindBy(css = "td.name")
         WebElement name;
 
         @FindBy(css = "div.deployments-number")
         WebElement deploymentsNumber;
+
+        @FindBy( css = "button#deployBtn ")
+        WebElement deployButton;
+
+        @Absolute
+        @FindBy(css="#deployDialogContainer")
+        CreateDeploymentDialog dialog;
 
         public void init(WebElement webElement) {
             this.webElement = webElement;
@@ -242,12 +249,16 @@ public class Blueprints extends AbstractComponent<Blueprints> {
             return blueprintPage.load();
         }
 
-        public CreateDeployment createDeployment() {
-            return createDeployment.openDialogBox(webElement);
+
+
+        public CreateDeploymentDialog createDeployment() {
+            deployButton.click();
+            return dialog.load();
+
         }
 
-        public class CreateDeployment {
-            protected CreateDeployment openDialogBox(WebElement blueprint) {
+        public class CreateDeploymentDialog extends AbstractComponent<CreateDeploymentDialog>{
+            protected CreateDeploymentDialog openDialogBox(WebElement blueprint) {
                 logger.info("Open Deploy Dialog");
                 WebElement deployButton = blueprint.findElement(By.cssSelector("button#deployBtn"));
                 deployButton.click();
@@ -256,16 +267,28 @@ public class Blueprints extends AbstractComponent<Blueprints> {
                 return this;
             }
 
-            public CreateDeployment enterName(String deploymentName) {
-                logger.info("CreateDeployment enterName: [{}]", deploymentName);
+            public CreateDeploymentDialog enterName(String deploymentName) {
+                logger.info("CreateDeploymentDialog enterName: [{}]", deploymentName);
                 deployConfirmBox.setDeploymentId(deploymentName);
                 return this;
             }
 
-            public void deploy() {
+            public Deployments  deploy() {
                 logger.info("Deploy!");
                 deployConfirmBox.submit();
+                dialog.enterName("some name");
+                dialog.deploy();
+                Deployments deployments = new Deployments();
+                return load( deployments, webDriver );
 
+            }
+
+
+            // GUY _ this is a hack until we get this into the test beans framework
+            @NoEnhancement
+            public <T > T load( T component, SearchContext searchContext) {
+                PageFactory.initElements(new GsFieldDecorator(searchContext, webDriver).setSwitchManager(switchManager).setWaitFor(waitFor), component);
+                return (T) this;
             }
 
             public void cancel() {
