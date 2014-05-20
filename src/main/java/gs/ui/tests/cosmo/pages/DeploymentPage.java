@@ -42,6 +42,9 @@ public class DeploymentPage extends AbstructBlueprint<DeploymentPage> {
     @FindBy(css = "div#events-widget-list-container tr")
     List<WebElement> eventsWidgetEventsList;
 
+    @FindBy(css = "div#deployment-progress-panel")
+    WebElement deploymentProgressPanel;
+
     @Absolute
     @FindBy(css="body")
     Confirm confirm = null;
