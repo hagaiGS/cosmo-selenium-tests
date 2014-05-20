@@ -249,7 +249,7 @@ public class Blueprints extends AbstractComponent<Blueprints> {
         public class CreateDeployment {
             protected CreateDeployment openDialogBox(WebElement blueprint) {
                 logger.info("Open Deploy Dialog");
-                WebElement deployButton = blueprint.findElement(By.cssSelector("button#deployBtn"));
+                WebElement deployButton = blueprint.findElement(By.cssSelector("button.deploy-button"));
                 deployButton.click();
                 deployConfirmBox.load();
 
