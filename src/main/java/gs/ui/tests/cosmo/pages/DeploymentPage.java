@@ -103,4 +103,8 @@ public class DeploymentPage extends AbstructBlueprint<DeploymentPage> {
         return numOfEventsWidget() > 0 ? false : true;
     }
 
+    public WebElement getProgressPanel() {
+        return deploymentProgressPanel;
+    }
+
 }
