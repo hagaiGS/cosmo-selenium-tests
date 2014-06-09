@@ -27,29 +27,29 @@ public class MyTest extends AbstractTestNGSpringContextTests {
     private Deployments deployments;
     private Logs logs;
 
-//    @Test
-//    public void initTestOfBlueprintPage() {
-//        logger.info("Start Blueprint Page Test");
-//        cosmoApp.goTo(config.url);
-//        blueprints = cosmoApp.getBlueprints();
-//
-//        config.setBlueprintName(config.getBlueprintName()+(12));
-//
-//        Blueprints.Blueprint blueprint = blueprints.getBlueprintById(config.blueprintName);
-//        Assert.assertNotEquals(blueprint, null, "Unable to find blueprint by ID: "+config.blueprintName);
-//
-//        logger.info("Start testing of blueprint: [{}]", blueprint.getName());
-//
-//        BlueprintPage blueprintPage = blueprint.open();
-//
-//        Assert.assertEquals(blueprintPage.numOfTopologyNodes(), 2, "Wrong number of topology nodes");
-//        Assert.assertEquals(blueprintPage.numOfNetworks(), 2, "Wrong number of networks");
-//        Assert.assertEquals(blueprintPage.numOfSubnets(), 1, "Wrong number of subnets");
-//        Assert.assertEquals(blueprintPage.numOfDevices(), 0, "Wrong number of devices");
-//        Assert.assertEquals(blueprintPage.numOfNodes(), 4, "Wrong number of nodes");
-//        Assert.assertEquals(blueprintPage.isSourceExist(), true, "Source code are empty");
-//
-//    }
+    @Test
+    public void initTestOfBlueprintPage() {
+        logger.info("Start Blueprint Page Test");
+        cosmoApp.goTo(config.url);
+        blueprints = cosmoApp.getBlueprints();
+
+        config.setBlueprintName(config.getBlueprintName()+(12));
+
+        Blueprints.Blueprint blueprint = blueprints.getBlueprintById(config.blueprintName);
+        Assert.assertNotEquals(blueprint, null, "Unable to find blueprint by ID: "+config.blueprintName);
+
+        logger.info("Start testing of blueprint: [{}]", blueprint.getName());
+
+        BlueprintPage blueprintPage = blueprint.open();
+
+        Assert.assertEquals(blueprintPage.numOfTopologyNodes(), 2, "Wrong number of topology nodes");
+        Assert.assertEquals(blueprintPage.numOfNetworks(), 2, "Wrong number of networks");
+        Assert.assertEquals(blueprintPage.numOfSubnets(), 1, "Wrong number of subnets");
+        Assert.assertEquals(blueprintPage.numOfDevices(), 0, "Wrong number of devices");
+        Assert.assertEquals(blueprintPage.numOfNodes(), 4, "Wrong number of nodes");
+        Assert.assertEquals(blueprintPage.isSourceExist(), true, "Source code are empty");
+
+    }
 
 
 
