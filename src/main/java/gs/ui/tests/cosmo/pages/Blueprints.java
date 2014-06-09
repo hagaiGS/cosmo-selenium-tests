@@ -52,13 +52,16 @@ public class Blueprints extends AbstractComponent<Blueprints> {
         return (Y) this;
     }
 
+    @NoEnhancement
     public Blueprints init() {
+        logger.info("Loading is here?");
         load();
         waitForBlueprintsLoaded();
         load();
         grabBlueprints();
         return this;
     }
+
 
     private void waitForBlueprintsLoaded(){
         logger.info("will wait for loading hidden");

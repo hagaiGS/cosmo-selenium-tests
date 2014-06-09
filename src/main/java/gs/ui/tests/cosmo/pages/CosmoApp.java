@@ -59,7 +59,14 @@ public class CosmoApp extends AbstractComponent<CosmoApp> {
     }
 
     public Blueprints getBlueprints() {
-        blueprints.init();
+        try {
+            //Thread.sleep(20000);
+            blueprints.init();
+        }
+        catch (Exception e) {
+            logger.error("unable to get blueprints", e);
+            return null;
+        }
         return blueprints;
     }
 
