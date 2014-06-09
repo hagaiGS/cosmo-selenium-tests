@@ -25,17 +25,17 @@ public class CosmoApp extends AbstractComponent<CosmoApp> {
 
     @Autowired
     @LazyLoad
-    @FindBy(css = "#main-content")
+    @FindBy(css = "body")
     public Deployments deployments;
 
     @Autowired
     @LazyLoad
-    @FindBy(css = "#main-content")
+    @FindBy(css = "body")
     public Blueprints blueprints;
 
     @Autowired
     @LazyLoad
-    @FindBy(css = "#main-content")
+    @FindBy(css = "body")
     public Logs logs;
 
     private static Logger logger = LoggerFactory.getLogger(CosmoApp.class);
@@ -60,7 +60,6 @@ public class CosmoApp extends AbstractComponent<CosmoApp> {
 
     public Blueprints getBlueprints() {
         try {
-            Thread.sleep(5000);
             blueprints.init();
         }
         catch (Exception e) {
