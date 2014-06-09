@@ -31,28 +31,28 @@ public class MyTest extends AbstractTestNGSpringContextTests {
         cosmoApp.goTo(config.url);
         blueprints = cosmoApp.getBlueprints();
 
-//        logger.info("Number of blueprints [{}]", blueprints.numOfBlueprints());
-//        config.setNumOfBlueprints(blueprints.numOfBlueprints());
-//        Assert.assertEquals(blueprints.numOfBlueprints(), config.numOfBlueprints, "Wrong number of blueprints");
-//
-//
-//        Blueprints.UploadBlueprint upload = blueprints.uploadBlueprint();
-//        config.setBlueprintName(config.getBlueprintName() + System.currentTimeMillis());
-//
-//        logger.info( config.blueprintFile );
-//        upload.browse( config.blueprintFile)
-//                .enterName(config.blueprintName)
-//                .upload();
-//
-//        logger.info("is upload succeeded? [{}]", upload.isUploadSucceeded());
-//        logger.info("Error Message [{}]", upload.error());
-//
-//        Assert.assertEquals(upload.isUploadSucceeded(), true, upload.error());
-//
-//        if(upload.isUploadSucceeded()) {
-//            upload.close();
-//            logger.info("Blueprint successfully uploaded and the list of blueprints was updated!");
-//        }
+        logger.info("Number of blueprints [{}]", blueprints.numOfBlueprints());
+        config.setNumOfBlueprints(blueprints.numOfBlueprints());
+        Assert.assertEquals(blueprints.numOfBlueprints(), config.numOfBlueprints, "Wrong number of blueprints");
+
+
+        Blueprints.UploadBlueprint upload = blueprints.uploadBlueprint();
+        config.setBlueprintName(config.getBlueprintName() + System.currentTimeMillis());
+
+        logger.info( config.blueprintFile );
+        upload.browse( config.blueprintFile)
+                .enterName(config.blueprintName)
+                .upload();
+
+        logger.info("is upload succeeded? [{}]", upload.isUploadSucceeded());
+        logger.info("Error Message [{}]", upload.error());
+
+        Assert.assertEquals(upload.isUploadSucceeded(), true, upload.error());
+
+        if(upload.isUploadSucceeded()) {
+            upload.close();
+            logger.info("Blueprint successfully uploaded and the list of blueprints was updated!");
+        }
 
     }
 
@@ -178,7 +178,7 @@ public class MyTest extends AbstractTestNGSpringContextTests {
         String url = "http://cosmo.gsdev.info/";
         String deploymentUrl = "http://cosmo.gsdev.info/#/deployments";
         String logsUrl = "http://cosmo.gsdev.info/#/logs";
-        String blueprintFile = Configuration.class.getClassLoader().getResource("neutronBlueprint.tar.gz").getPath();
+        String blueprintFile = Configuration.class.getClassLoader().getResource("neutronBlueprint.tar.gz").getPath().substring(1);
         String blueprintName = "Neutron_Blueprint_Test_";
 
         int numOfBlueprints = 1;

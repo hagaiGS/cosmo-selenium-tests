@@ -47,21 +47,18 @@ public class Blueprints extends AbstractComponent<Blueprints> {
 
     // GUY _ this is a hack until we get this into the test beans framework
     @NoEnhancement
-    public <Y > Y load( Y component, SearchContext searchContext) {
+    public <T > T load( T component, SearchContext searchContext) {
         PageFactory.initElements(new GsFieldDecorator(searchContext, webDriver).setSwitchManager(switchManager).setWaitFor(waitFor), component);
-        return (Y) this;
+        return (T) this;
     }
 
-    @NoEnhancement
     public Blueprints init() {
-        logger.info("Loading is here?");
         load();
         waitForBlueprintsLoaded();
         load();
         grabBlueprints();
         return this;
     }
-
 
     private void waitForBlueprintsLoaded(){
         logger.info("will wait for loading hidden");
@@ -99,7 +96,7 @@ public class Blueprints extends AbstractComponent<Blueprints> {
             }
         }
         catch (Exception e) {
-            throw new RuntimeException("Can't wait for blueprintsDomList", e);
+            throw new RuntimeException("Unable to grab blueprints", e);
         }
     }
 
@@ -210,20 +207,13 @@ public class Blueprints extends AbstractComponent<Blueprints> {
     }
 
     public class Blueprint extends AbstractComponent<Blueprint>  {
-        private CreateDeploymentDialog createDeployment = new CreateDeploymentDialog();
+        private CreateDeployment createDeployment = new CreateDeployment();
 
         @FindBy(css = "td.name")
         WebElement name;
 
         @FindBy(css = "div.deployments-number")
         WebElement deploymentsNumber;
-
-        @FindBy( css = "button#deployBtn ")
-        WebElement deployButton;
-
-        @Absolute
-        @FindBy(css="#deployDialogContainer")
-        CreateDeploymentDialog dialog;
 
         public void init(WebElement webElement) {
             this.webElement = webElement;
@@ -252,16 +242,12 @@ public class Blueprints extends AbstractComponent<Blueprints> {
             return blueprintPage.load();
         }
 
-
-
-        public CreateDeploymentDialog createDeployment() {
-            deployButton.click();
-            return dialog.load();
-
+        public CreateDeployment createDeployment() {
+            return createDeployment.openDialogBox(webElement);
         }
 
-        public class CreateDeploymentDialog extends AbstractComponent<CreateDeploymentDialog>{
-            protected CreateDeploymentDialog openDialogBox(WebElement blueprint) {
+        public class CreateDeployment {
+            protected CreateDeployment openDialogBox(WebElement blueprint) {
                 logger.info("Open Deploy Dialog");
                 WebElement deployButton = blueprint.findElement(By.cssSelector("button.deploy-button"));
                 deployButton.click();
@@ -270,28 +256,16 @@ public class Blueprints extends AbstractComponent<Blueprints> {
                 return this;
             }
 
-            public CreateDeploymentDialog enterName(String deploymentName) {
-                logger.info("CreateDeploymentDialog enterName: [{}]", deploymentName);
+            public CreateDeployment enterName(String deploymentName) {
+                logger.info("CreateDeployment enterName: [{}]", deploymentName);
                 deployConfirmBox.setDeploymentId(deploymentName);
                 return this;
             }
 
-            public Deployments  deploy() {
+            public void deploy() {
                 logger.info("Deploy!");
                 deployConfirmBox.submit();
-                dialog.enterName("some name");
-                dialog.deploy();
-                Deployments deployments = new Deployments();
-                return load( deployments, webDriver );
 
-            }
-
-
-            // GUY _ this is a hack until we get this into the test beans framework
-            @NoEnhancement
-            public <T > T load( T component, SearchContext searchContext) {
-                PageFactory.initElements(new GsFieldDecorator(searchContext, webDriver).setSwitchManager(switchManager).setWaitFor(waitFor), component);
-                return (T) this;
             }
 
             public void cancel() {
