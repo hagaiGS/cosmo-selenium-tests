@@ -1,5 +1,6 @@
 package gs.ui.tests.cosmo.pages;
 
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.PageFactory;
@@ -17,7 +18,7 @@ import webui.tests.selenium.GsFieldDecorator;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.NoSuchElementException;
+
 
 /**
  * Created by Itsik on 3/10/14.
@@ -135,11 +136,16 @@ public class Blueprints extends AbstractComponent<Blueprints> {
         }
 
         public void close() {
-            if(uploadDialogContainer.isDisplayed()) {
-                uploadDialogContainer.findElement(By.cssSelector("div.dialogClose")).click();
-                if(isUploadSucceeded()) {
-                    waitForBlueprintsLoaded();
+            try {
+                if (uploadDialogContainer.isDisplayed()) {
+                    uploadDialogContainer.findElement(By.cssSelector("div.dialogClose")).click();
+                    if (isUploadSucceeded()) {
+                        waitForBlueprintsLoaded();
+                    }
                 }
+
+            }catch(Exception e){
+                logger.debug("got exception while closing dialog. assuming closed",e);
             }
         }
 
