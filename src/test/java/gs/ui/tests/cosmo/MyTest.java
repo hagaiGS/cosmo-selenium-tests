@@ -32,14 +32,16 @@ public class MyTest extends AbstractTestNGSpringContextTests {
         blueprints = cosmoApp.getBlueprints();
 
         logger.info("number of blueprints [{}]", blueprints.numOfBlueprints());
+        logger.info("setting number of blueprints on config");
         config.setNumOfBlueprints(blueprints.numOfBlueprints());
+        logger.info("set number of blueprints on config");
 
 
         // guy - tests are not rerunable this way.
 //        logger.info("verifying number of blueprints is [{}]", config.numOfBlueprints);
 //        Assert.assertEquals(blueprints.numOfBlueprints(), config.numOfBlueprints, "Wrong number of blueprints");
 
-
+        logger.info("uploading blueprint");
         Blueprints.UploadBlueprint upload = blueprints.uploadBlueprint();
         config.setBlueprintName(config.getBlueprintName() + System.currentTimeMillis());
 
