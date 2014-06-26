@@ -27,13 +27,17 @@ public class MyTest extends AbstractTestNGSpringContextTests {
 
     @Test(groups = "uploadBlueprint")
     public void testBlueprintUpload() {
-        logger.info("Start Blueprint Upload Test");
+        logger.info("start blueprint upload test on [{}]", config.url);
         cosmoApp.goTo(config.url);
         blueprints = cosmoApp.getBlueprints();
 
-        logger.info("Number of blueprints [{}]", blueprints.numOfBlueprints());
+        logger.info("number of blueprints [{}]", blueprints.numOfBlueprints());
         config.setNumOfBlueprints(blueprints.numOfBlueprints());
-        Assert.assertEquals(blueprints.numOfBlueprints(), config.numOfBlueprints, "Wrong number of blueprints");
+
+
+        // guy - tests are not rerunable this way.
+//        logger.info("verifying number of blueprints is [{}]", config.numOfBlueprints);
+//        Assert.assertEquals(blueprints.numOfBlueprints(), config.numOfBlueprints, "Wrong number of blueprints");
 
 
         Blueprints.UploadBlueprint upload = blueprints.uploadBlueprint();
