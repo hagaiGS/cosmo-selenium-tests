@@ -115,11 +115,14 @@ public class Blueprints extends AbstractComponent<Blueprints> {
     }
 
     public UploadBlueprint uploadBlueprint() {
+        logger.info("opening dialog inbox");
         return uploadBlueprint.openDialogBox();
     }
 
     public class UploadBlueprint {
         protected UploadBlueprint openDialogBox() {
+            logger.info("clicking upload button");
+            waitFor.elements(uploadBlueprintBtn);
             uploadBlueprintBtn.click();
             waitFor.elements(uploadDialogContainer);
             return this;

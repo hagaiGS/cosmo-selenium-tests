@@ -20,7 +20,13 @@
 
     <beans profile="helloWorldBlueprint">
         <bean id="helloWorldBlueprint" class="gs.ui.tests.cosmo.MyTest$Configuration">
-            <property name="url" value="http://localhost:9000/#/blueprint"/>
+            <property name="url" value="http://localhost:9000/#/blueprints"/>
+        </bean>
+    </beans>
+
+    <beans profile="qa">
+        <bean id="qa" class="gs.ui.tests.cosmo.MyTest$Configuration">
+            <property name="url" value="http://15.125.123.82/#/blueprints"/>
         </bean>
     </beans>
 

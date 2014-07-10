@@ -91,5 +91,11 @@
                 <spring.profile>neutronBlueprint</spring.profile>
             </properties>
         </profile>
+        <profile>
+            <id>qa</id>
+            <properties>
+                <spring.profile>qa</spring.profile>
+            </properties>
+        </profile>
     </profiles>
 </project>
