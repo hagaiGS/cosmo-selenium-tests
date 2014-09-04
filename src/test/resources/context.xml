@@ -21,7 +21,7 @@
     <bean id="Config" class="gs.ui.tests.cosmo.MyTest$Configuration">
         <property name="url" value="http://15.126.247.5/#/blueprints"/>
         <property name="blueprintFile" value="C:\hagai\nodecellar.tar.gz"/> <!-- The path of the blueprint in the selenium-server machine -->
-        <property name="blueprintName" value="openstack-nodecellar"/>
+        <property name="blueprintName" value="openstack_nodecellar"/>
     </bean>
 
     <beans profile="helloWorldBlueprint">
