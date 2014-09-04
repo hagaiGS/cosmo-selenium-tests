@@ -18,6 +18,11 @@
     <bean id="logs" class="gs.ui.tests.cosmo.pages.Logs" />
     <bean id="confirm" class="gs.ui.tests.cosmo.pages.Confirm" />
 
+    <bean id="Config" class="gs.ui.tests.cosmo.MyTest$Configuration">
+        <property name="url" value="http://15.126.247.5/#/blueprints"/>
+        <property name="blueprintFile" value="/root/Downloads/nodecellar_blueprint.tar.gz"/>
+    </bean>
+
     <beans profile="helloWorldBlueprint">
         <bean id="helloWorldBlueprint" class="gs.ui.tests.cosmo.MyTest$Configuration">
             <property name="url" value="http://localhost:9000/#/blueprints"/>
