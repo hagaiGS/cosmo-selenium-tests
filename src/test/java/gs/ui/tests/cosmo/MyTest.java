@@ -27,37 +27,42 @@ public class MyTest extends AbstractTestNGSpringContextTests {
 
     @Test(groups = "uploadBlueprint")
     public void testBlueprintUpload() {
-        logger.info("start blueprint upload test on [{}]", config.url);
-        cosmoApp.goTo(config.url);
-        blueprints = cosmoApp.getBlueprints();
+        try {
+            logger.info("start blueprint upload test on [{}]", config.url);
+            cosmoApp.goTo(config.url);
+            blueprints = cosmoApp.getBlueprints();
 
-        logger.info("number of blueprints [{}]", blueprints.numOfBlueprints());
-        logger.info("setting number of blueprints on config");
-        config.setNumOfBlueprints(blueprints.numOfBlueprints());
-        logger.info("set number of blueprints on config");
+            logger.info("number of blueprints [{}]", blueprints.numOfBlueprints());
+            logger.info("setting number of blueprints on config");
+            config.setNumOfBlueprints(blueprints.numOfBlueprints());
+            logger.info("set number of blueprints on config");
 
 
-        // guy - tests are not rerunable this way.
+            // guy - tests are not rerunable this way.
 //        logger.info("verifying number of blueprints is [{}]", config.numOfBlueprints);
 //        Assert.assertEquals(blueprints.numOfBlueprints(), config.numOfBlueprints, "Wrong number of blueprints");
 
-        logger.info("uploading blueprint");
-        Blueprints.UploadBlueprint upload = blueprints.uploadBlueprint();
-        config.setBlueprintName(config.getBlueprintName() + System.currentTimeMillis());
+            logger.info("uploading blueprint");
+            Blueprints.UploadBlueprint upload = blueprints.uploadBlueprint();
+            config.setBlueprintName(config.getBlueprintName() + System.currentTimeMillis());
 
-        logger.info( config.blueprintFile );
-        upload.browse( config.blueprintFile)
-                .enterName(config.blueprintName)
-                .upload();
+            logger.info(config.blueprintFile);
+            upload.browse(config.blueprintFile)
+                    .enterName(config.blueprintName)
+                    .upload();
 
-        logger.info("is upload succeeded? [{}]", upload.isUploadSucceeded());
-        logger.info("Error Message [{}]", upload.error());
+            logger.info("is upload succeeded? [{}]", upload.isUploadSucceeded());
+            logger.info("Error Message [{}]", upload.error());
 
-        Assert.assertEquals(upload.isUploadSucceeded(), true, upload.error());
+            Assert.assertEquals(upload.isUploadSucceeded(), true, upload.error());
 
-        if(upload.isUploadSucceeded()) {
-            upload.close();
-            logger.info("Blueprint successfully uploaded and the list of blueprints was updated!");
+            if (upload.isUploadSucceeded()) {
+                upload.close();
+                logger.info("Blueprint successfully uploaded and the list of blueprints was updated!");
+            }
+        }catch (Exception e){
+            logger.error("Got an error during the test",e);
+            Assert.fail("Un-expected exception was thrown");
         }
 
     }
