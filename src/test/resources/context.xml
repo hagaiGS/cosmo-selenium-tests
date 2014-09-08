@@ -20,8 +20,20 @@
 
     <bean id="Config" class="gs.ui.tests.cosmo.MyTest$Configuration">
         <property name="url" value="http://ENTER_IP_HERE/#/blueprints"/>
-        <property name="blueprintFile" value="/vagrant/nodecellar.tar.gz"/> <!-- The path of the blueprint in the selenium-server machine -->
+        <property name="blueprintFile" value="C:\hagai\nodecellar.tar.gz"/> <!-- The path of the blueprint in the selenium-server machine -->
         <property name="blueprintName" value="openstack_nodecellar" />
     </bean>
+
+    <beans profile="helloWorldBlueprint">
+        <bean id="helloWorldBlueprint" class="gs.ui.tests.cosmo.MyTest$Configuration">
+            <property name="url" value="http://localhost:9000/#/blueprints"/>
+        </bean>
+    </beans>
+
+    <beans profile="qa">
+        <bean id="qa" class="gs.ui.tests.cosmo.MyTest$Configuration">
+            <property name="url" value="http://15.125.123.82/#/blueprints"/>
+        </bean>
+    </beans>
 
 </beans>
