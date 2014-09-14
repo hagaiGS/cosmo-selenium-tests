@@ -27,6 +27,7 @@ public class MyTest extends AbstractTestNGSpringContextTests {
 
     @Test(groups = "uploadBlueprint")
     public void testBlueprintUpload() {
+        logger.info("Using management with IP " + config.getUrl());
         try {
             logger.info("start blueprint upload test on [{}]", config.url);
             cosmoApp.goTo(config.url);
