@@ -20,7 +20,7 @@
 
     <bean id="Config" class="gs.ui.tests.cosmo.MyTest$Configuration">
         <property name="url" value="http://#{environment.COSMO_WEBUI_IP}/#/blueprints"/>
-        <property name="blueprintFile" value="C:\hagai\nodecellar.tar.gz"/> <!-- The path of the blueprint in the selenium-server machine -->
+        <property name="blueprintFile" value="#{environment.BLUEPRINT_PATH}"/> <!-- The path of the blueprint in the selenium-server machine -->
         <property name="blueprintName" value="openstack_nodecellar" />
     </bean>
 
